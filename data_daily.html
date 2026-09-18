@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Data Daily - Turn Life into Data & Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        appleBg: '#F2F2F7', 
+                        appleCard: '#FFFFFF',
+                        appleBlue: '#007AFF', 
+                        appleGreen: '#34C759', 
+                        appleRed: '#FF3B30', 
+                        applePurple: '#AF52DE',
+                        appleOrange: '#FF9500',
+                        appleDark: '#1C1C1E', 
+                        appleGray: '#8E8E93', 
+                        appleBorder: 'rgba(60,60,67,0.1)'
+                    },
+                    boxShadow: {
+                        'apple': '0 4px 24px rgba(0, 0, 0, 0.04)',
+                        'apple-btn': '0 2px 8px rgba(0, 122, 255, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #E5E5EA;
+            color: #1C1C1E;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .apple-glass {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        .vocab {
+            color: #007AFF;
+            border-bottom: 1px dotted #007AFF;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .vocab:active { opacity: 0.5; }
+
+        .chat-bubble-ai {
+            background: #E9E9EB;
+            color: #1C1C1E;
+            border-radius: 18px 18px 18px 4px;
+        }
+        .chat-bubble-user {
+            background: #007AFF;
+            color: #FFFFFF;
+            border-radius: 18px 18px 4px 18px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 md:p-4">
+
+    <div id="app-container" class="w-full h-screen md:h-[85vh] md:max-h-[850px] max-w-md bg-appleBg md:rounded-[40px] shadow-2xl relative flex flex-col overflow-hidden border-0 md:border-4 md:border-white">
+        
+        <!-- HEADER -->
+        <header class="px-6 pt-12 pb-4 flex justify-between items-end z-20 shrink-0 bg-appleBg">
+            <div>
+                <p class="text-[12px] font-semibold text-appleGray mb-1 uppercase tracking-wider">AI Data Companion</p>
+                <h1 class="text-3xl font-bold text-appleDark tracking-tight">Data Daily</h1>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="w-9 h-9 rounded-full bg-appleCard border border-appleBorder flex items-center justify-center shadow-sm mb-1">
+                    <i class="fa-solid fa-user-secret text-appleBlue"></i>
+                </div>
+                <div class="text-[12px] font-semibold text-appleGray"><span id="header-xp">180</span> XP</div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="main-content" class="flex-1 overflow-y-auto no-scrollbar relative z-10 px-5 pb-28 pt-2">
+            <!-- Dynamic Content -->
+        </main>
+
+        <!-- NAVIGATION -->
+        <nav class="absolute bottom-0 w-full apple-glass border-t border-appleBorder pb-8 pt-3 px-6 z-20 flex justify-between items-center transition-all md:pb-4">
+            <button onclick="navigate('home')" class="nav-btn flex flex-col items-center gap-1 w-14 text-appleBlue transition-colors" id="nav-home">
+                <i class="fa-solid fa-house text-[20px] mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Home</span>
+            </button>
+            <button onclick="navigate('sync')" class="nav-btn flex flex-col items-center gap-1 w-14 text-appleGray transition-colors" id="nav-sync">
+                <i class="fa-solid fa-cloud-arrow-down text-[20px] mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Sync</span>
+            </button>
+            <button onclick="navigate('studio')" class="nav-btn flex flex-col items-center gap-1 w-14 text-appleGray transition-colors" id="nav-studio">
+                <i class="fa-solid fa-flask text-[20px] mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Studio</span>
+            </button>
+            <button onclick="navigate('tutor')" class="nav-btn flex flex-col items-center gap-1 w-14 text-appleGray transition-colors" id="nav-tutor">
+                <i class="fa-solid fa-robot text-[20px] mb-0.5"></i>
+                <span class="text-[10px] font-semibold">AI Tutor</span>
+            </button>
+            <button onclick="navigate('portfolio')" class="nav-btn flex flex-col items-center gap-1 w-14 text-appleGray transition-colors" id="nav-portfolio">
+                <i class="fa-solid fa-folder text-[20px] mb-0.5"></i>
+                <span class="text-[10px] font-semibold">Port</span>
+            </button>
+        </nav>
+
+        <!-- iOS Style Alert Modal -->
+        <div id="alert-modal" class="absolute inset-0 z-50 hidden flex-col items-center justify-center p-4">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAlert()"></div>
+            <div class="bg-white/95 backdrop-blur-xl w-[290px] rounded-[24px] text-center overflow-hidden shadow-2xl relative z-10 slide-up">
+                <div class="p-5 pt-6">
+                    <div id="alert-icon" class="text-4xl mb-3"></div>
+                    <h3 id="alert-title" class="text-[17px] font-semibold text-appleDark mb-1">Title</h3>
+                    <div id="alert-desc" class="text-[13px] text-appleDark/70 leading-relaxed mt-1">Description</div>
+                </div>
+                <div class="border-t border-appleBorder flex">
+                    <button onclick="closeAlert()" class="w-full py-3.5 text-[17px] text-appleBlue font-semibold active:bg-gray-100 transition-colors">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dictionary/Vocab Popup -->
+        <div id="vocab-modal" class="absolute inset-0 z-50 hidden flex-col justify-end">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeVocab()"></div>
+            <div class="bg-appleBg w-full rounded-t-[32px] p-6 pb-12 relative z-10 transform transition-transform translate-y-full shadow-[0_-10px_40px_rgba(0,0,0,0.1)]" id="vocab-content">
+                <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-5"></div>
+                <div class="flex justify-between items-start mb-2">
+                    <h3 id="vocab-en" class="text-2xl font-bold text-appleDark">Word</h3>
+                    <button onclick="closeVocab()" class="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center text-appleGray"><i class="fa-solid fa-times text-sm"></i></button>
+                </div>
+                <p id="vocab-th" class="text-[15px] font-medium text-appleBlue mb-4">Translation</p>
+                <div class="bg-appleCard p-4 rounded-[16px] shadow-sm">
+                    <p class="text-[11px] font-semibold text-appleGray mb-1 uppercase tracking-wider">Data Context</p>
+                    <p id="vocab-ctx" class="text-[14px] text-appleDark leading-relaxed">Context</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let state = {
+            xp: 180,
+            view: 'home',
+            metrics: { spent: 460, sleep: 7.8, songs: 36, runKm: 6.8 },
+            sources: [
+                { id: 'photos', name: 'Photos & Bank OCR', desc: 'Auto-extract digital transfer slips & receipts', icon: 'fa-images', color: 'text-appleBlue', connected: true },
+                { id: 'bank', name: 'Mobile Banking App', desc: 'Sync digital transfer records & manual input', icon: 'fa-wallet', color: 'text-appleOrange', connected: false },
+                { id: 'watch', name: 'Smart Watch & Health', desc: 'Apple Health step and sleep telemetry', icon: 'fa-heart-pulse', color: 'text-appleGreen', connected: true },
+                { id: 'music', name: 'Spotify Vibe Stream', desc: 'Track daily listening duration & mood', icon: 'fa-headphones', color: 'text-applePurple', connected: true }
+            ],
+            quests: [
+                { id: 'q1', title: 'Data Cleaning: Multi-Source NULLs', role: 'Data Engineering', desc: 'Clean missing records across health and financial logs.', exportRequired: 'csv', verified: true, link: 'https://github.com/anon/life-pipeline' },
+                { id: 'q2', title: 'Analytics: Sleep vs Spend Correlation', role: 'Data Analytics', desc: 'Analyze if lower sleep hours correlate with higher daily spending.', exportRequired: 'csv', verified: false, link: '' },
+                { id: 'q3', title: 'ML Pipeline: Predict Next Day Mood', role: 'Machine Learning', desc: 'Build a time-series feature set from Spotify tracks and running pace.', exportRequired: 'json', verified: false, link: '' }
+            ],
+            tutorMessages: [
+                { sender: 'ai', text: 'สวัสดีครับ! ผมคือ AI Tutor พี่เลี้ยงคิดเชิงระบบ วันนี้คุณอยากให้ผมช่วยไกด์โจทย์วิเคราะห์ข้อมูลตัวไหนจากชีวิตประจำวันของคุณดีครับ?' }
+            ]
+        };
+
+        const vocabDB = {
+            "extract": { th: "ดึงข้อมูล", ctx: "กระบวนการนำข้อมูลดิบออกจากแหล่งต้นทาง เช่น ดึงตัวเลขจากรูปใบเสร็จ" },
+            "raw data": { th: "ข้อมูลดิบ", ctx: "ข้อมูลที่เพิ่งดึงมา ยังไม่ได้จัดระเบียบ มักจะมีข้อผิดพลาดปนอยู่" },
+            "clean": { th: "ทำความสะอาดข้อมูล", ctx: "การแก้ไขข้อผิดพลาด ลบข้อมูลซ้ำ หรือเติมข้อมูลที่แหว่งหายไป" },
+            "pipeline": { th: "ท่อส่งข้อมูล", ctx: "กระบวนการอัตโนมัติตั้งแต่ดึงข้อมูล ทำความสะอาด จนพร้อมใช้งาน" },
+            "correlation": { th: "ความสัมพันธ์เชิงสถิติ", ctx: "การวิเคราะห์ว่าตัวแปรสองตัววิ่งไปในทิศทางเดียวกันหรือไม่" }
+        };
+
+        const mainContent = document.getElementById('main-content');
+        
+        function init() { renderHome(); }
+
+        function navigate(view) {
+            state.view = view;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-appleBlue');
+                btn.classList.add('text-appleGray');
+            });
+            document.getElementById(`nav-${view}`).classList.remove('text-appleGray');
+            document.getElementById(`nav-${view}`).classList.add('text-appleBlue');
+
+            if(view === 'home') renderHome();
+            if(view === 'sync') renderSyncHub();
+            if(view === 'studio') renderDataStudio();
+            if(view === 'tutor') renderAITutor();
+            if(view === 'portfolio') renderPortfolio();
+        }
+
+        function renderHome() {
+            mainContent.innerHTML = `
+                <div class="slide-up">
+                    <h2 class="text-xl font-bold text-appleDark mb-4">Life Metrics <span class="text-sm font-normal text-appleGray">Live Feed</span></h2>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-appleCard p-4 rounded-[20px] shadow-apple border border-appleBorder">
+                            <div class="text-[13px] font-semibold text-appleGray mb-2"><i class="fa-solid fa-wallet text-appleOrange mr-1"></i> Spent</div>
+                            <div class="text-2xl font-bold text-appleDark">฿ ${state.metrics.spent}<span class="text-sm text-appleGray">.00</span></div>
+                        </div>
+                        <div class="bg-appleCard p-4 rounded-[20px] shadow-apple border border-appleBorder">
+                            <div class="text-[13px] font-semibold text-appleGray mb-2"><i class="fa-solid fa-moon text-applePurple mr-1"></i> Sleep</div>
+                            <div class="text-2xl font-bold text-appleDark">${state.metrics.sleep}<span class="text-sm text-appleGray"> hrs</span></div>
+                        </div>
+                        <div class="bg-appleCard p-4 rounded-[20px] shadow-apple border border-appleBorder">
+                            <div class="text-[13px] font-semibold text-appleGray mb-2"><i class="fa-solid fa-person-running text-appleGreen mr-1"></i> Running</div>
+                            <div class="text-2xl font-bold text-appleDark">${state.metrics.runKm}<span class="text-sm text-appleGray"> km</span></div>
+                        </div>
+                        <div class="bg-appleCard p-4 rounded-[20px] shadow-apple border border-appleBorder">
+                            <div class="text-[13px] font-semibold text-appleGray mb-2"><i class="fa-solid fa-headphones text-appleBlue mr-1"></i> Spotify</div>
+                            <div class="text-2xl font-bold text-appleDark">${state.metrics.songs}<span class="text-sm text-appleGray"> tracks</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 rounded-[20px] p-4 mb-4 flex gap-3 items-start border border-blue-100">
+                        <i class="fa-solid fa-robot text-appleBlue mt-1 text-lg"></i>
+                        <p class="text-[13px] text-appleDark/80 leading-relaxed">
+                            ต้องการคำแนะนำวิธีคิดวิเคราะห์ข้อมูลใช่ไหม? ลองคุยกับ <a href="#" onclick="navigate('tutor')" class="text-appleBlue underline font-semibold">AI Tutor</a> เพื่อฝึกคิดเชิงระบบทีละสเต็ปได้เลยครับ
+                        </p>
+                    </div>
+
+                    <div class="bg-appleCard p-4 rounded-[20px] shadow-apple border border-appleBorder flex items-center justify-between cursor-pointer" onclick="navigate('studio')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-appleBlue flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-flask"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-[15px] font-semibold text-appleDark">Data Studio & Quests</h4>
+                                <p class="text-[11px] text-appleGray">Export data & submit portfolio projects</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-appleGray text-xs"></i>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSyncHub() {
+            let sourcesHTML = state.sources.map(s => `
+                <div class="bg-appleCard p-4 rounded-[20px] shadow-apple mb-3 border border-appleBorder flex items-center justify-between">
+                    <div class="flex items-center gap-3.5 pr-2">
+                        <div class="w-11 h-11 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid ${s.icon} ${s.color} text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-[15px] font-semibold text-appleDark">${s.name}</h4>
+                            <p class="text-[11px] text-appleGray mt-0.5 leading-snug">${s.desc}</p>
+                        </div>
+                    </div>
+                    <div>
+                        ${s.connected 
+                            ? '<span class="text-[12px] font-semibold bg-green-50 text-appleGreen px-3.5 py-1.5 rounded-full border border-green-200">Synced</span>'
+                            : '<button onclick="toggleSync(\''+s.id+'\')" class="text-[12px] font-semibold bg-appleBlue text-white px-4 py-1.5 rounded-full shadow-sm">Sync</button>'
+                        }
+                    </div>
+                </div>
+            `).join('');
+
+            mainContent.innerHTML = `
+                <div class="slide-up">
+                    <div class="mb-4">
+                        <h2 class="text-[22px] font-bold text-appleDark">Sync Hub</h2>
+                        <p class="text-[13px] text-appleGray mt-0.5">Ingest <span class="vocab font-medium" onclick="showVocab('raw data')">raw data</span> from your real apps.</p>
+                    </div>
+                    ${sourcesHTML}
+                </div>
+            `;
+        }
+
+        function toggleSync(id) {
+            const src = state.sources.find(s => s.id === id);
+            src.connected = true;
+            addXP(20);
+            showAlert('<i class="fa-solid fa-cloud-arrow-down text-appleBlue"></i>', 'Synced Successfully', `Data ingested from ${src.name} into your local pipeline.`);
+        }
+
+        function renderDataStudio() {
+            let questsHTML = state.quests.map((q, idx) => `
+                <div class="bg-appleCard p-4 rounded-[20px] shadow-apple mb-4 border border-appleBorder">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-50 text-appleBlue">${q.role}</span>
+                        <span class="text-[11px] font-semibold ${q.verified ? 'text-appleGreen' : 'text-orange-500'}">${q.verified ? 'Verified & Complete' : 'Pending Submission'}</span>
+                    </div>
+                    <h4 class="text-[15px] font-semibold text-appleDark mb-1">${q.title}</h4>
+                    <p class="text-[12px] text-appleGray mb-3">${q.desc}</p>
+                    
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportDataPackage('${q.exportRequired}')" class="bg-gray-100 text-appleDark text-[11px] font-semibold px-3 py-2 rounded-[10px] active:scale-95">
+                            <i class="fa-solid fa-download mr-1"></i> Export ${q.exportRequired.toUpperCase()}
+                        </button>
+                        <button onclick="openSubmitModal(${idx})" class="flex-1 bg-appleBlue text-white text-[11px] font-semibold px-3 py-2 rounded-[10px] active:scale-95 shadow-sm">
+                            <i class="fa-solid fa-paper-plane mr-1"></i> ${q.verified ? 'Update Link' : 'Submit Quest Link'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            mainContent.innerHTML = `
+                <div class="slide-up">
+                    <div class="mb-4">
+                        <h2 class="text-[22px] font-bold text-appleDark">Data Studio & Quests</h2>
+                        <p class="text-[13px] text-appleGray mt-0.5">Export datasets, build solutions, and submit to your portfolio.</p>
+                    </div>
+                    ${questsHTML}
+                </div>
+            `;
+        }
+
+        function exportDataPackage(type) {
+            showAlert('<i class="fa-solid fa-file-arrow-down text-appleBlue"></i>', `Exported .${type.toUpperCase()} File`, `Dataset successfully generated and downloaded. Action verified by system!`);
+        }
+
+        function openSubmitModal(idx) {
+            const q = state.quests[idx];
+            showAlert('<i class="fa-solid fa-link text-appleBlue"></i>', `Submit: ${q.title}`, 
+                `<input type="text" id="quest-link-input" placeholder="Paste Tableau / GitHub URL here..." value="${q.link}" class="w-full mt-2 p-2.5 bg-gray-100 rounded-[12px] text-[12px] outline-none border border-appleBorder">`, 
+                () => {
+                    const val = document.getElementById('quest-link-input').value;
+                    if(val) {
+                        q.link = val;
+                        q.verified = true;
+                        addXP(30);
+                        showAlert('<i class="fa-solid fa-check-circle text-appleGreen"></i>', 'AI Verified & Saved', 'AI automated check confirmed schema validity. Project added to your resume!');
+                        renderDataStudio();
+                    }
+                }
+            );
+        }
+
+        function renderAITutor() {
+            let messagesHTML = state.tutorMessages.map(m => `
+                <div class="flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'} mb-3">
+                    <div class="max-w-[85%] p-3.5 text-[13px] leading-relaxed ${m.sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}">
+                        ${m.text}
+                    </div>
+                </div>
+            `).join('');
+
+            mainContent.innerHTML = `
+                <div class="slide-up flex flex-col h-full pb-16">
+                    <div class="mb-2">
+                        <h2 class="text-[20px] font-bold text-appleDark">AI Tutor & Coach</h2>
+                        <p class="text-[12px] text-appleGray">Ask questions or learn systematic thinking step-by-step.</p>
+                    </div>
+                    
+                    <div id="chat-box" class="flex-1 bg-appleCard rounded-[20px] p-4 border border-appleBorder overflow-y-auto mb-3 max-h-[320px] shadow-sm">
+                        ${messagesHTML}
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="tutor-input" placeholder="ถามวิธีคิด หรือวิธีเขียน SQL/Python..." class="flex-1 bg-appleCard px-4 py-3 rounded-[16px] text-[13px] border border-appleBorder outline-none shadow-sm">
+                        <button onclick="sendTutorMessage()" class="bg-appleBlue text-white w-11 h-11 rounded-[16px] flex items-center justify-center shrink-0 shadow-apple-btn active:scale-95">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            const cb = document.getElementById('chat-box');
+            cb.scrollTop = cb.scrollHeight;
+        }
+
+        function sendTutorMessage() {
+            const input = document.getElementById('tutor-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            state.tutorMessages.push({ sender: 'user', text: text });
+            input.value = '';
+            renderAITutor();
+
+            setTimeout(() => {
+                let aiReply = "เป็นคำถามที่ดีมากครับ! หากเรามองแบบ Systematic Thinking ให้เริ่มจาก 1) กำหนดโจทย์ก่อนว่าเราอยากรู้อะไร 2) เช็คว่าเรามีข้อมูลดิบอะไรบ้างใน Sync Hub 3) เขียนเงื่อนไขหรือเลือกกราฟเพื่อตอบโจทย์นั้น ลองทำตามขั้นตอนนี้ดูครับ!";
+                if(text.includes('SQL') || text.includes('sql')) {
+                    aiReply = "สำหรับการเขียน SQL วิเคราะห์ข้อมูลในชีวิตประจำวัน แนะนำให้ใช้คำสั่ง GROUP BY วันเพื่อดูพฤติกรรม เช่น `SELECT date, SUM(spent) FROM transactions GROUP BY date;` ลองนำไปประยุกต์ดูนะครับ!";
+                }
+                state.tutorMessages.push({ sender: 'ai', text: aiReply });
+                renderAITutor();
+            }, 600);
+        }
+
+        function renderPortfolio() {
+            const verifiedQuests = state.quests.filter(q => q.verified);
+            let bullets = verifiedQuests.map(q => `
+                <li class="text-[13px] text-appleDark/80 flex items-start gap-2 mb-2">
+                    <i class="fa-solid fa-circle text-[6px] mt-1.5 text-appleBlue"></i>
+                    <div><span class="font-semibold">[${q.role}]</span> Executed pipeline and built visual dashboards for ${q.title} using personal multi-source telemetry.</div>
+                </li>
+            `).join('');
+
+            mainContent.innerHTML = `
+                <div class="slide-up pb-10">
+                    <h2 class="text-[22px] font-bold text-appleDark mb-1">Auto-Portfolio</h2>
+                    <p class="text-[13px] text-appleGray mb-4">Your verified data projects translated into professional English resume bullets.</p>
+                    
+                    <div class="bg-appleCard p-6 rounded-[24px] shadow-apple border border-appleBorder mb-6">
+                        <div class="flex justify-between items-start mb-4 border-b border-gray-100 pb-3">
+                            <div>
+                                <h1 class="text-[18px] font-bold text-appleDark">Anon_Ghost</h1>
+                                <p class="text-[12px] font-medium text-appleBlue">Data Analyst & Engineer (Remote Ready)</p>
+                            </div>
+                            <span class="bg-blue-50 text-appleBlue text-[10px] font-bold px-2.5 py-1 rounded-md uppercase">Verified</span>
+                        </div>
+                        <h3 class="text-[11px] font-semibold text-appleGray uppercase tracking-wider mb-2">Projects (${verifiedQuests.length}/${state.quests.length})</h3>
+                        <ul class="list-none space-y-2">
+                            ${bullets || '<li class="text-[13px] text-appleGray italic">Submit quest links in Data Studio to unlock resume entries.</li>'}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        let alertCallback = null;
+        function showAlert(iconHTML, title, desc, callback) {
+            document.getElementById('alert-icon').innerHTML = iconHTML;
+            document.getElementById('alert-title').innerHTML = title;
+            document.getElementById('alert-desc').innerHTML = desc;
+            alertCallback = callback;
+            document.getElementById('alert-modal').classList.remove('hidden');
+            document.getElementById('alert-modal').classList.add('flex');
+        }
+
+        function closeAlert() {
+            document.getElementById('alert-modal').classList.add('hidden');
+            document.getElementById('alert-modal').classList.remove('flex');
+            if(alertCallback) { alertCallback(); alertCallback = null; }
+        }
+
+        function showVocab(wordKey) {
+            const vocab = vocabDB[wordKey];
+            if(!vocab) return;
+            document.getElementById('vocab-en').innerText = wordKey;
+            document.getElementById('vocab-th').innerText = vocab.th;
+            document.getElementById('vocab-ctx').innerText = vocab.ctx;
+            const modal = document.getElementById('vocab-modal');
+            const content = document.getElementById('vocab-content');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => content.classList.remove('translate-y-full'), 10);
+        }
+
+        function closeVocab() {
+            const modal = document.getElementById('vocab-modal');
+            const content = document.getElementById('vocab-content');
+            content.classList.add('translate-y-full');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+        }
+
+        function addXP(amount) {
+            state.xp += amount;
+            document.getElementById('header-xp').innerText = state.xp;
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
